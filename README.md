@@ -27,7 +27,7 @@ Designed with a clean **glassmorphism UI**, optimized for **both mobile and desk
 ---
 
 ## 🚀 Live Demo
-🔗 [https://reachouttohardik.github.io/syncrin](#) 
+🔗 [https://reachouttohardik.github.io/syncrin](https://reachouttohardik.github.io/syncrin) 
 
 ---
 
