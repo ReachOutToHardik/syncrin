@@ -37,6 +37,6 @@ I’m a 18 y/o student / freelancer / indie developer
 a Boy who gets stressed up quickly
 and yeah im into everything(not really lol)
 
-🎵 Also into music: [@hardik_joshi14](https://instagram.com/hardik_joshi14)  
 Let’s connect 👇  
-📧 [joshi14hardik@gmail.com](joshi14hardik@gmail.com)
+📱 [@hardik_joshi14](https://instagram.com/hardik_joshi14)  
+📧 joshi14hardik@gmail.com
