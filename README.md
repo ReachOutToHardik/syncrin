@@ -27,23 +27,16 @@ Designed with a clean **glassmorphism UI**, optimized for **both mobile and desk
 ---
 
 ## 🚀 Live Demo
-🔗 [https://yourusername.github.io/syncrin](#) *(replace this with your link)*
-
----
-
-## 📸 Screenshots
-*(Optional: Add screenshots here)*  
-- Home Page with Search  
-- Login/Signup UI  
-- Movie Detail + Stream Player
+🔗 [https://reachouttohardik.github.io/syncrin](#) 
 
 ---
 
 ## 👨‍💻 About Me
 Hey, I’m **Hardik Joshi** aka **CLOUD** ☁️  
-I’m a 17 y/o indie dev & artist from India 🇮🇳  
-I like building cool projects and experimenting with design + tech.
+I’m a 18 y/o student / freelancer / indie developer 
+a Boy who gets stressed up quickly
+and yeah im into everything(not really lol)
 
 🎵 Also into music: [@hardik_joshi14](https://instagram.com/hardik_joshi14)  
 Let’s connect 👇  
-📧 hardikjoshi@example.com *(replace with yours)*
+📧 joshi14hardik@gmail.com *(replace with yours)*
