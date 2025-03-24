@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Syncrin - Watch</title>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Inter:400,500&display=swap"
+    />
+    <style>
+      :root {
+        --bg-gradient: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+        --accent: #8a2be2;
+        --accent-hover: #9932cc;
+        --text-primary: #ffffff;
+        --text-secondary: #c0c0c0;
+        --card-bg: rgba(0, 0, 0, 0.9);
+        --glass-effect: rgba(255, 255, 255, 0.05);
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        background: var(--bg-gradient);
+        color: var(--text-primary);
+        font-family: "Inter", sans-serif;
+        line-height: 1.6;
+        overflow-x: hidden;
+      }
+      /* Fixed Header */
+      header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        padding: 1.5rem 5%;
+        background: rgba(0, 0, 0, 0.95);
+        backdrop-filter: blur(10px);
+        z-index: 1000;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .logo {
+        font-size: 2rem;
+        font-weight: 700;
+        background: linear-gradient(45deg, var(--accent), #ff6b6b);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+      .back-link {
+        font-size: 1rem;
+        color: var(--text-primary);
+        text-decoration: none;
+        background: var(--accent);
+        padding: 0.5rem 1rem;
+        border-radius: 50px;
+        transition: background 0.3s ease;
+      }
+      .back-link:hover {
+        background: var(--accent-hover);
+      }
+      .container {
+        max-width: 1200px;
+        margin: 100px auto 20px;
+        padding: 20px;
+        animation: fadeIn 1s ease-in;
+      }
+      /* Content Layout */
+      .content {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+      }
+      .video-section {
+        flex: 2;
+        min-width: 300px;
+        background: #000;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.8);
+      }
+      .video-section iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+      }
+      .details-section {
+        flex: 1;
+        min-width: 300px;
+        background: var(--card-bg);
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+        max-height: 600px;
+        overflow-y: auto;
+      }
+      .details-section h1 {
+        font-size: 2rem;
+        margin-bottom: 10px;
+        color: var(--accent);
+      }
+      .details-section p {
+        margin-bottom: 1rem;
+        font-size: 1rem;
+        color: var(--text-secondary);
+        line-height: 1.4;
+      }
+      .extra-details p {
+        margin-bottom: 0.5rem;
+      }
+      /* TV Controls */
+      .tv-controls {
+        margin-top: 1rem;
+        padding: 10px;
+        background: var(--glass-effect);
+        border-radius: 5px;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 10px;
+      }
+      .tv-controls label {
+        font-size: 0.9rem;
+      }
+      .tv-controls select {
+        padding: 5px;
+        border-radius: 5px;
+        border: 1px solid var(--text-secondary);
+        background: var(--card-bg);
+        color: var(--text-primary);
+        font-size: 0.9rem;
+      }
+      .tv-controls button {
+        padding: 5px 10px;
+        border-radius: 5px;
+        border: none;
+        background: var(--accent);
+        color: var(--bg-gradient);
+        cursor: pointer;
+        transition: background 0.3s;
+        font-size: 0.9rem;
+      }
+      .tv-controls button:hover {
+        background: var(--accent-hover);
+      }
+      footer {
+        text-align: center;
+        margin-top: 40px;
+        font-size: 0.8rem;
+        color: var(--text-secondary);
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+      @media (max-width: 768px) {
+        .content {
+          flex-direction: column;
+        }
+        .video-section {
+          height: 50vh;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header role="banner">
+      <div class="logo">Syncrin</div>
+      <a class="back-link" href="index.html" role="link">← Back to Home</a>
+    </header>
+    <div class="container" role="main">
+      <div class="content">
+        <div class="video-section">
+          <iframe
+            id="videoEmbed"
+            src=""
+            allowfullscreen
+            title="Video Player"
+          ></iframe>
+        </div>
+        <div class="details-section" id="detailsSection">
+          <h1 id="movieTitle">Loading...</h1>
+          <p id="movieYear"></p>
+          <p id="moviePlot"></p>
+          <p><strong>Genre:</strong> <span id="movieGenre"></span></p>
+          <p><strong>Director:</strong> <span id="movieDirector"></span></p>
+          <p><strong>Actors:</strong> <span id="movieActors"></span></p>
+          <p><strong>IMDB Rating:</strong> <span id="movieRating"></span></p>
+          <div class="extra-details" id="extraDetails"></div>
+          <div
+            id="tvControls"
+            class="tv-controls"
+            style="display: none"
+            aria-label="TV Controls"
+          >
+            <label for="seasonSelect">Season:</label>
+            <select id="seasonSelect" aria-label="Select Season"></select>
+            <label for="episodeSelect">Episode:</label>
+            <select id="episodeSelect" aria-label="Select Episode"></select>
+            <button id="loadEpisodeBtn" aria-label="Load Episode">
+              Load Episode
+            </button>
+          </div>
+        </div>
+      </div>
+      <footer>
+        <p>
+          © 2025 Syncrin. Designed by <strong>Hardik Joshi</strong>. Follow on
+          Instagram:
+          <a
+            href="https://instagram.com/hardik_joshi14"
+            target="_blank"
+            rel="noopener"
+            >hardik_joshi14</a
+          >
+        </p>
+      </footer>
+    </div>
+
+    <script type="module">
+  import { app } from "./firebase-init.js";
+  import {
+    getAuth,
+    onAuthStateChanged,
+    signOut
+  } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-auth.js";
+
+  const auth = getAuth(app);
+  onAuthStateChanged(auth, (user) => {
+    if (!user) {
+      window.location.href = "login.html";
+    }
+  });
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const logoutBtn = document.getElementById("logoutBtn");
+    if (logoutBtn) {
+      logoutBtn.addEventListener("click", async () => {
+        try {
+          await signOut(auth);
+          window.location.href = "login.html";
+        } catch (error) {
+          console.error("Logout error:", error);
+        }
+      });
+    }
+  });
+</script>
+<script>
+      // Helper: Get query parameter from URL
+      function getQueryParameter(name) {
+        const params = new URLSearchParams(window.location.search);
+        return params.get(name);
+      }
+
+      const OMDB_API_KEY = "3ece141c"; // Replace with your API key if needed
+      const imdbID = getQueryParameter("imdbID");
+      const typeParam = getQueryParameter("type"); // "movie" or "series"
+
+      const movieTitleEl = document.getElementById("movieTitle");
+      const movieYearEl = document.getElementById("movieYear");
+      const moviePlotEl = document.getElementById("moviePlot");
+      const movieGenreEl = document.getElementById("movieGenre");
+      const movieDirectorEl = document.getElementById("movieDirector");
+      const movieActorsEl = document.getElementById("movieActors");
+      const movieRatingEl = document.getElementById("movieRating");
+      const extraDetailsEl = document.getElementById("extraDetails");
+      const videoEmbed = document.getElementById("videoEmbed");
+      const tvControls = document.getElementById("tvControls");
+      const seasonSelect = document.getElementById("seasonSelect");
+      const episodeSelect = document.getElementById("episodeSelect");
+      const loadEpisodeBtn = document.getElementById("loadEpisodeBtn");
+
+      if (!imdbID) {
+        document.body.innerHTML = "<p>No movie selected.</p>";
+      } else {
+        fetch(
+          `https://www.omdbapi.com/?apikey=${OMDB_API_KEY}&i=${imdbID}&plot=full`
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.Response === "True") {
+              movieTitleEl.textContent = data.Title;
+              movieYearEl.textContent =
+                data.Year + (data.Runtime ? " | " + data.Runtime : "");
+              moviePlotEl.textContent = data.Plot;
+              movieGenreEl.textContent = data.Genre;
+              movieDirectorEl.textContent = data.Director;
+              movieActorsEl.textContent = data.Actors;
+              movieRatingEl.textContent = data.imdbRating;
+              extraDetailsEl.innerHTML = `
+                <p><strong>Released:</strong> ${data.Released}</p>
+                <p><strong>Awards:</strong> ${data.Awards}</p>
+                <p><strong>Language:</strong> ${data.Language}</p>
+              `;
+
+              if (data.Type === "series" || typeParam === "series") {
+                videoEmbed.src = `https://vidsrc.cc/v2/embed/tv/${imdbID}`;
+                if (data.totalSeasons) {
+                  tvControls.style.display = "flex";
+                  populateSeasonOptions(data.totalSeasons);
+                }
+              } else {
+                videoEmbed.src = `https://vidsrc.cc/v2/embed/movie/${imdbID}`;
+              }
+            } else {
+              document.getElementById("detailsSection").innerHTML =
+                "<p>Movie details not found.</p>";
+            }
+          })
+          .catch((err) => {
+            console.error(err);
+            document.getElementById("detailsSection").innerHTML =
+              "<p>Error loading details.</p>";
+          });
+      }
+
+      function populateSeasonOptions(totalSeasons) {
+        seasonSelect.innerHTML = "";
+        for (let i = 1; i <= totalSeasons; i++) {
+          const option = document.createElement("option");
+          option.value = i;
+          option.textContent = "Season " + i;
+          seasonSelect.appendChild(option);
+        }
+        seasonSelect.addEventListener("change", loadEpisodesForSeason);
+        loadEpisodesForSeason();
+      }
+
+      function loadEpisodesForSeason() {
+        const season = seasonSelect.value;
+        fetch(
+          `https://www.omdbapi.com/?apikey=${OMDB_API_KEY}&i=${imdbID}&Season=${season}`
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            episodeSelect.innerHTML = "";
+            if (data.Response === "True" && data.Episodes) {
+              data.Episodes.forEach((ep) => {
+                const option = document.createElement("option");
+                option.value = ep.Episode;
+                option.textContent = `Episode ${ep.Episode}: ${ep.Title}`;
+                episodeSelect.appendChild(option);
+              });
+            } else {
+              episodeSelect.innerHTML = "<option>No episodes found</option>";
+            }
+          })
+          .catch((err) => console.error(err));
+      }
+
+      loadEpisodeBtn.addEventListener("click", () => {
+        const season = seasonSelect.value;
+        const episode = episodeSelect.value;
+        if (!season || !episode) {
+          alert("Please select both season and episode!");
+          return;
+        }
+        videoEmbed.src = `https://vidsrc.cc/v2/embed/tv/${imdbID}/${season}/${episode}`;
+      });
+    </script>
+  </body>
+</html>

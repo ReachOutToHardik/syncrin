@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Syncrin - Profile</title>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Inter:400,500&display=swap"
+    />
+    <style>
+      :root {
+        --bg-gradient: linear-gradient(135deg, #000, #1a1a1a);
+        --accent: #8a2be2;
+        --accent-hover: #9932cc;
+        --text-primary: #fff;
+        --glass-effect: rgba(255, 255, 255, 0.05);
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        background: var(--bg-gradient);
+        color: var(--text-primary);
+        font-family: "Inter", sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        overflow: hidden;
+      }
+      header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        padding: 1rem 5%;
+        background: rgba(0, 0, 0, 0.85);
+        backdrop-filter: blur(10px);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        z-index: 1000;
+      }
+      header .logo {
+        font-size: 1.5rem;
+        font-weight: 700;
+        background: linear-gradient(45deg, var(--accent), var(--accent-hover));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+      header nav a {
+        color: var(--text-primary);
+        text-decoration: none;
+        margin-left: 1rem;
+      }
+      .profile-container {
+        background: rgba(0, 0, 0, 0.85);
+        backdrop-filter: blur(10px);
+        padding: 2rem;
+        border-radius: 12px;
+        width: 90%;
+        max-width: 400px;
+        text-align: center;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+      }
+      .profile-container h1 {
+        margin-bottom: 1rem;
+        color: var(--accent);
+      }
+      .profile-container img {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-bottom: 1rem;
+      }
+      .profile-container input {
+        width: 100%;
+        padding: 0.75rem;
+        margin: 0.5rem 0;
+        border: none;
+        border-radius: 8px;
+        background: var(--glass-effect);
+        color: var(--text-primary);
+      }
+      .profile-container button {
+        width: 100%;
+        padding: 0.75rem;
+        margin-top: 1rem;
+        border: none;
+        border-radius: 8px;
+        background: var(--accent);
+        color: var(--text-primary);
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.3s ease;
+      }
+      .profile-container button:hover {
+        background: var(--accent-hover);
+      }
+      .error-message {
+        color: var(--accent);
+        margin-top: 1rem;
+      }
+      footer {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        text-align: center;
+        padding: 0.5rem 0;
+        background: rgba(0, 0, 0, 0.85);
+        color: var(--text-primary);
+        font-size: 0.8rem;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="logo">Syncrin</div>
+      <nav>
+        <a href="index.html">Home</a>
+        <a href="profile.html">Profile</a>
+        <button id="logoutBtn">Logout</button>
+      </nav>
+    </header>
+    <div class="profile-container">
+      <h1>My Profile</h1>
+      <img
+        id="profilePic"
+        src="https://via.placeholder.com/100?text=No+Image"
+        alt="Profile Picture"
+      />
+      <input
+        type="text"
+        id="displayName"
+        placeholder="Enter display name"
+        aria-label="Display Name"
+      />
+      <input
+        type="text"
+        id="photoURL"
+        placeholder="Enter profile picture URL"
+        aria-label="Profile Picture URL"
+      />
+      <button id="saveProfileBtn">Save Changes</button>
+      <div class="error-message" id="errorMessage" role="alert"></div>
+    </div>
+    <footer>
+      <p>© 2025 Syncrin. Designed by <strong>Hardik Joshi</strong>.</p>
+    </footer>
+
+    <script type="module">
+      import {
+        getAuth,
+        signOut,
+        updateProfile,
+        onAuthStateChanged,
+      } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-auth.js";
+      const auth = getAuth();
+
+      onAuthStateChanged(auth, (user) => {
+        if (!user) {
+          window.location.href = "login.html";
+        } else {
+          document.getElementById("displayName").value = user.displayName || "";
+          document.getElementById("profilePic").src =
+            user.photoURL || "https://via.placeholder.com/100?text=No+Image";
+        }
+      });
+
+      document
+        .getElementById("saveProfileBtn")
+        .addEventListener("click", async () => {
+          const displayName = document
+            .getElementById("displayName")
+            .value.trim();
+          const photoURL = document.getElementById("photoURL").value.trim();
+          try {
+            await updateProfile(auth.currentUser, { displayName, photoURL });
+            alert("Profile updated successfully!");
+            window.location.reload();
+          } catch (error) {
+            document.getElementById("errorMessage").textContent = error.message;
+          }
+        });
+
+      document
+        .getElementById("logoutBtn")
+        .addEventListener("click", async () => {
+          try {
+            await signOut(auth);
+            window.location.href = "login.html";
+          } catch (error) {
+            console.error("Logout error:", error);
+          }
+        });
+    <script type="module">
+  import { app } from "./firebase-init.js";
+  import {
+    getAuth,
+    signOut,
+    updateProfile,
+    onAuthStateChanged
+  } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-auth.js";
+
+  const auth = getAuth(app);
+
+  onAuthStateChanged(auth, (user) => {
+    if (!user) {
+      window.location.href = "login.html";
+    } else {
+      document.getElementById("displayName").value = user.displayName || "";
+      document.getElementById("profilePic").src = user.photoURL || "https://via.placeholder.com/100?text=No+Image";
+    }
+  });
+
+  document.getElementById("saveProfileBtn").addEventListener("click", async () => {
+    const displayName = document.getElementById("displayName").value.trim();
+    const photoURL = document.getElementById("photoURL").value.trim();
+    try {
+      await updateProfile(auth.currentUser, { displayName, photoURL });
+      alert("Profile updated!");
+      window.location.reload();
+    } catch (error) {
+      document.getElementById("errorMessage").textContent = error.message;
+    }
+  });
+
+  document.getElementById("logoutBtn").addEventListener("click", async () => {
+    try {
+      await signOut(auth);
+      window.location.href = "login.html";
+    } catch (error) {
+      console.error("Logout error:", error);
+    }
+  });
+</script>
