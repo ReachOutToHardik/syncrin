@@ -39,4 +39,4 @@ and yeah im into everything(not really lol)
 
 🎵 Also into music: [@hardik_joshi14](https://instagram.com/hardik_joshi14)  
 Let’s connect 👇  
-📧 joshi14hardik@gmail.com *(replace with yours)*
+📧 [joshi14hardik@gmail.com](joshi14hardik@gmail.com)
