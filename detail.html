@@ -82,11 +82,47 @@
         border-radius: 10px;
         overflow: hidden;
         box-shadow: 0 8px 16px rgba(0, 0, 0, 0.8);
+        position: relative;
+      }
+      .video-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 50px;
+        background: #000;
+        z-index: 1;
       }
       .video-section iframe {
         width: 100%;
         height: 100%;
         border: none;
+        position: relative;
+        z-index: 2;
+      }
+      /* Enhanced ad blocking styles */
+      .video-section::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        pointer-events: none;
+        z-index: 3;
+        background: transparent;
+      }
+      /* Add styles to block common ad elements */
+      .video-section iframe[src*="vidsrc"] {
+        filter: brightness(1.1) contrast(1.1);
+      }
+      /* Block any overlays */
+      .video-section * {
+        pointer-events: none;
+      }
+      .video-section iframe {
+        pointer-events: auto;
       }
       .details-section {
         flex: 1;
@@ -261,6 +297,93 @@
         return params.get(name);
       }
 
+      // Enhanced ad blocking functionality
+      function setupAdBlocking() {
+        const videoSection = document.querySelector('.video-section');
+        const iframe = document.getElementById('videoEmbed');
+        
+        // Block right clicks
+        videoSection.addEventListener('contextmenu', (e) => e.preventDefault());
+        
+        // Block popups and redirects
+        window.addEventListener('beforeunload', (e) => {
+          if (e.target === iframe) {
+            e.preventDefault();
+            return false;
+          }
+        });
+
+        // Block iframe clicks that might trigger ads
+        iframe.addEventListener('load', () => {
+          try {
+            iframe.contentWindow.addEventListener('click', (e) => {
+              // Only block clicks on ad elements
+              if (e.target.tagName === 'A' || e.target.closest('a')) {
+                e.preventDefault();
+                return false;
+              }
+            }, true);
+          } catch (e) {
+            // Cross-origin error, but that's okay
+          }
+        });
+
+        // Block keyboard shortcuts that might trigger ads
+        document.addEventListener('keydown', (e) => {
+          if (e.ctrlKey || e.metaKey) {
+            e.preventDefault();
+            return false;
+          }
+        });
+
+        // Block common ad-related events
+        const events = ['mouseover', 'mouseenter', 'mouseleave', 'dblclick', 'contextmenu'];
+        events.forEach(event => {
+          videoSection.addEventListener(event, (e) => {
+            if (e.target !== iframe) {
+              e.preventDefault();
+              e.stopPropagation();
+              return false;
+            }
+          }, true);
+        });
+
+        // Add mutation observer to block dynamic ad elements
+        const observer = new MutationObserver((mutations) => {
+          mutations.forEach((mutation) => {
+            if (mutation.addedNodes.length) {
+              mutation.addedNodes.forEach((node) => {
+                if (node.nodeType === 1) { // Element node
+                  if (node.tagName === 'IFRAME' || node.tagName === 'DIV') {
+                    // Only hide elements that look like ads
+                    if (node.style.position === 'fixed' || 
+                        node.style.zIndex > 1000 || 
+                        node.classList.contains('ad') ||
+                        node.id.includes('ad')) {
+                      node.style.display = 'none';
+                    }
+                  }
+                }
+              });
+            }
+          });
+        });
+
+        observer.observe(videoSection, {
+          childList: true,
+          subtree: true,
+          attributes: true,
+          attributeFilter: ['style', 'class']
+        });
+
+        // Block any new windows or redirects
+        window.addEventListener('blur', (e) => {
+          if (e.target === iframe) {
+            window.focus();
+          }
+        });
+      }
+
       const OMDB_API_KEY = "3ece141c"; // Replace with your API key if needed
       const imdbID = getQueryParameter("imdbID");
       const typeParam = getQueryParameter("type"); // "movie" or "series"
@@ -304,12 +427,14 @@
 
               if (data.Type === "series" || typeParam === "series") {
                 videoEmbed.src = `https://vidsrc.cc/v2/embed/tv/${imdbID}`;
+                setupAdBlocking();
                 if (data.totalSeasons) {
                   tvControls.style.display = "flex";
                   populateSeasonOptions(data.totalSeasons);
                 }
               } else {
                 videoEmbed.src = `https://vidsrc.cc/v2/embed/movie/${imdbID}`;
+                setupAdBlocking();
               }
             } else {
               document.getElementById("detailsSection").innerHTML =
@@ -365,6 +490,7 @@
           return;
         }
         videoEmbed.src = `https://vidsrc.cc/v2/embed/tv/${imdbID}/${season}/${episode}`;
+        setupAdBlocking();
       });
     </script>
   </body>
